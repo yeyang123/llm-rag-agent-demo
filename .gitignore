@@ -1,0 +1,10 @@
+# 虚拟环境
+venv/
+.venv/
+
+# 机密文件
+.env
+
+# Python 缓存
+__pycache__/
+*.pyc
