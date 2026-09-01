@@ -6,8 +6,10 @@
 
 ```
 llm-rag-agent-demo/
-├─ main.py            # 入口：直接调用 DeepSeek，体验一次完整对话
-├─ llm_client.py      # 封装：可复用的 LLM 调用函数 get_llm_response()
+├─ main.py            # Day4 入口：while + input() 多轮对话，维护 messages 列表
+├─ llm_client.py      # 封装：get_llm_response() 单轮 / chat_with_messages() 多轮
+├─ read_txt.py        # Day3 演示：txt 文件读写 + 发起提问
+├─ questions.txt      # Day3 演示用的问题文件
 ├─ requirements.txt   # 依赖清单
 ├─ .env               # 存放 API Key（已被 .gitignore 排除，不会上传）
 ├─ .gitignore         # git 忽略配置
@@ -61,12 +63,17 @@ DEEPSEEK_API_KEY=sk-你的key
 ### 5. 运行
 
 ```bash
-# 方式一：入口演示
+# 方式一：多轮对话（Day4）
 python main.py
 
-# 方式二：测试封装的客户端
+# 方式二：测试封装的客户端（单轮 + 多轮演示）
 python llm_client.py
 ```
+
+多轮对话中支持的特殊命令：
+
+- `exit` / `quit` / `q`：退出对话
+- `clear`：清空上下文，相当于开新会话
 
 运行成功会输出模型回答和本次消耗的 token 统计。
 
@@ -74,7 +81,7 @@ python llm_client.py
 
 ### main.py
 
-最小可运行的 LLM 调用示例：加载 `.env` → 创建 OpenAI 兼容客户端（指向 DeepSeek）→ 发起对话 → 打印回答与 token 用量。
+Day4 多轮对话入口：`while True` + `input()` 循环读取用户输入，用「列表套字典」维护 `messages` 对话历史，每次把完整历史发给模型，模型因此能记住上下文。核心语法点：列表 `append()` / `pop()`、字典、`while True`、`break` / `continue`、`input()`。
 
 ### llm_client.py
 
@@ -89,7 +96,9 @@ answer, usage = get_llm_response("什么是RAG？一句话")
 ## Roadmap
 
 - [x] LLM 基础调用（DeepSeek）
-- [ ] Prompt 模板与多轮对话
+- [x] 文件读写 + 复用客户端提问
+- [x] 多轮对话（messages 列表套字典）
+- [ ] Prompt 模板
 - [ ] RAG：文档切分 + 向量检索 + 上下文注入
 - [ ] Agent：工具调用（Function Calling）
 - [ ] 简单 Web UI
