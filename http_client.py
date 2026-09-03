@@ -29,7 +29,9 @@ def chat_raw(messages: list[dict], temperature: float = 0.1) -> dict:
     }
     # json=payload 会自动把字典序列化成 JSON 字符串
     resp = requests.post(API_URL, headers=headers, json=payload, timeout=60)
-    resp.raise_for_status()  # 状态码非 2xx 就抛异常（以前 SDK 帮你做的事）
+    if not resp.ok:
+        print("API 错误响应体:", resp.text)   # 看清 DeepSeek 到底说了啥
+        resp.raise_for_status()
     return resp.json()       # JSON 字符串 -> Python 字典
 
 def chat_with_messages(messages: list[dict], temperature: float = 0.1):
@@ -42,7 +44,36 @@ def chat_with_messages(messages: list[dict], temperature: float = 0.1):
     usage = data["usage"]  # 字典：usage["prompt_tokens"] / usage["completion_tokens"]
     return answer, usage
 
+def ask_llm(prompt: str, system: str = "", temperature: float = 0.1):
+    """
+    【Day6】单轮提问的便捷封装。
+    和 Day3 llm_client.get_llm_response 接口一致，但底层走裸调 HTTP。
+    返回 (answer, usage_dict)。
+    """
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+    return chat_with_messages(messages, temperature=temperature)
+
 if __name__ == "__main__":
+        # ============================================================
+    # 【Day6 实验】同一问题，三个温度对比 + token 观察
+    # ============================================================
+    PROMPT = "用一句话介绍 Python 的列表推导式"
+    SYSTEM = "你是一个简洁的 Python 老师"
+
+    print("=" * 60)
+    print("【Day6】温度对比实验")
+    print("=" * 60)
+
+    for t in (0.1, 0.7, 1.5):  # 低 / 中 / 高
+        ans, usage = ask_llm(PROMPT, system=SYSTEM, temperature=t)
+        print(f"\n--- temperature = {t} ---")
+        print(f"回答: {ans}")
+        print(f"token: 输入 {usage['prompt_tokens']} / "
+              f"输出 {usage['completion_tokens']} / "
+              f"合计 {usage['total_tokens']}")
     # ============================================================
     # 第 1 部分：单次调用，打印完整响应 JSON
     # ============================================================

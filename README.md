@@ -10,7 +10,7 @@ llm-rag-agent-demo/
 ├─ llm_client.py      # 封装：get_llm_response() 单轮 / chat_with_messages() 多轮
 ├─ read_txt.py        # Day3 演示：txt 文件读写 + 发起提问
 ├─ questions.txt      # Day3 演示用的问题文件
-├─ http_client.py # Day5：requests 裸调 HTTP，对照 JSON 理解 SDK 底层
+├─ http_client.py     # Day5：requests 裸调 HTTP，对照 JSON 理解 SDK 底层
 ├─ requirements.txt   # 依赖清单
 ├─ .env               # 存放 API Key（已被 .gitignore 排除，不会上传）
 ├─ .gitignore         # git 忽略配置
@@ -103,6 +103,7 @@ SDK 的 client.chat.completions.create(...) 底层其实就是一次 HTTP POST�
 - [x] 文件读写 + 复用客户端提问
 - [x] 多轮对话（messages 列表套字典）
 - [x] requests 裸调 HTTP（看懂 SDK 底层）
+- [x] requests 裸调 HTTP + temperature 对比 + token 观察
 - [ ] Prompt 模板
 - [ ] RAG：文档切分 + 向量检索 + 上下文注入
 - [ ] Agent：工具调用（Function Calling）
