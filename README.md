@@ -12,6 +12,7 @@ llm-rag-agent-demo/
 ├─ questions.txt      # Day3 演示用的问题文件
 ├─ http_client.py     # Day5：requests 裸调 HTTP，对照 JSON 理解 SDK 底层
 ├─ requirements.txt   # 依赖清单
+├─ doc_qa.py          # Day7：读 TXT 全文拼进 prompt，读文档提问（RAG 雏形）
 ├─ .env               # 存放 API Key（已被 .gitignore 排除，不会上传）
 ├─ .gitignore         # git 忽略配置
 └─ .venv/             # Python 虚拟环境（本地生成，不入库）
